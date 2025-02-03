@@ -1,15 +1,17 @@
 package io.github.theguardians.screens
 
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.utils.Scaling
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.github.quillraven.fleks.World
+import io.github.theguardians.components.AnimationComponent
+import io.github.theguardians.components.AnimationModel
+import io.github.theguardians.components.AnimationType
 import io.github.theguardians.components.ImageComponent
 import io.github.theguardians.components.ImageComponent.Companion.ImageComponentListener
+import io.github.theguardians.systems.AnimationSystem
 import io.github.theguardians.systems.RenderSystem
 import ktx.app.KtxScreen
 import ktx.assets.disposeSafely
@@ -17,21 +19,28 @@ import ktx.log.logger
 
 class GameScreen: KtxScreen {
     private val stage = Stage(ExtendViewport(16f, 9f))
-    private val textureAtlas = TextureAtlas("assets/graphics/TheGuardians.atlas")
+    private val textureAtlas = TextureAtlas("assets/graphics/game.atlas")
     private val world: World = World {
         inject(stage)
-        system<RenderSystem>()
+        inject(textureAtlas)
+
         componentListener<ImageComponentListener>()
+
+        system<AnimationSystem>()
+        system<RenderSystem>()
     }
 
     override fun show() {
 
         world.entity {
             add<ImageComponent> {
-                image = Image(TextureRegion(textureAtlas.findRegion("player"), 0 ,0, 32, 32)).apply {
-                    setSize(1f, 1f)
+                image = Image().apply {
+                    setSize(2f, 2f)
                     setScaling(Scaling.fill)
                 }
+            }
+            add<AnimationComponent> {
+                nextAnimation(AnimationModel.PLAYER, AnimationType.FRONT)
             }
         }
     }
