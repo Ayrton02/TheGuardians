@@ -60,6 +60,7 @@ class EntitySpawnSystem (
 
                 if(type == "Player") {
                     add<PlayerComponent>()
+                    add<CameraLockComponent>()
                 }
 
                 physicalComponentFromImage(physicWorld, imageComponent.image, BodyDef.BodyType.DynamicBody) {
