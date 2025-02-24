@@ -1,6 +1,9 @@
 package io.github.theguardians.systems
 
 import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.physics.box2d.*
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.StaticBody
 import com.badlogic.gdx.physics.box2d.World
 import com.github.quillraven.fleks.*
 import io.github.theguardians.components.ImageComponent
@@ -13,7 +16,11 @@ class PhysicSystem(
     private val physicWorld: World,
     private val imageComponents: ComponentMapper<ImageComponent>,
     private val physicComponents: ComponentMapper<PhysicComponent>
-): IteratingSystem(interval = Fixed(1/60f)) {
+): ContactListener, IteratingSystem(interval = Fixed(1/60f)) {
+
+    init {
+        physicWorld.setContactListener(this)
+    }
 
     override fun onUpdate() {
         if (physicWorld.autoClearForces) {
@@ -58,4 +65,20 @@ class PhysicSystem(
             )
         }
     }
+
+    override fun beginContact(p0: Contact?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun endContact(p0: Contact?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun preSolve(contact: Contact, manifold: Manifold) {
+        contact.isEnabled =
+            (contact.fixtureA.body.type == StaticBody && contact.fixtureB.body.type == DynamicBody) ||
+            (contact.fixtureB.body.type == StaticBody && contact.fixtureA.body.type == DynamicBody)
+    }
+
+    override fun postSolve(p0: Contact?, p1: ContactImpulse?) = Unit
 }

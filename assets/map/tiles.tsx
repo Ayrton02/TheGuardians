@@ -6,8 +6,14 @@
  </tile>
  <tile id="1">
   <image width="32" height="32" source="stone.png"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32"/>
+  </objectgroup>
  </tile>
  <tile id="2">
   <image width="32" height="32" source="water.png"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32"/>
+  </objectgroup>
  </tile>
 </tileset>

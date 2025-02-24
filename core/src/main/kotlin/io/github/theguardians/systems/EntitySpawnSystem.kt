@@ -63,8 +63,12 @@ class EntitySpawnSystem (
                     add<CameraLockComponent>()
                 }
 
-                physicalComponentFromImage(physicWorld, imageComponent.image, BodyDef.BodyType.DynamicBody) {
-                    physicComponent, width, heigth -> box(width, heigth) {
+                physicalComponentFromImage(physicWorld, imageComponent.image, configuration.bodyType) {
+                    physicComponent, width, heigth ->
+                    val boxWidth = width * configuration.physicScaling.x
+                    val boxHeight = heigth * configuration.physicScaling.y
+
+                    box(boxWidth, boxHeight, configuration.physicOffSet) {
                         isSensor = false
                     }
                 }
